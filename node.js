@@ -7,15 +7,14 @@ const HOSTNAME = "localhost";
 http
   .createServer((req, res) => {
     const filePath = path.join(__dirname, "index.html");
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
-        res.writeHead(500, { "Content-Type": "text/plain" });
-        res.end("Internal Server Error");
-      } else {
-        res.writeHead(200, { "Content-Type": "text/html" });
-        res.end(data);
-      }
-    });
+    if (req.url !== "/") {
+      res.writeHead(404, { "Content-Type": "text/plain" });
+      res.end("Not Found");
+      return;
+    } else {
+      res.writeHead(200, { "Content-Type": "text/html" });
+      res.end(data);
+    }
   })
   .listen(PORT, HOSTNAME, () => {
     console.log(`Server running at http://${HOSTNAME}:${PORT}/`);
